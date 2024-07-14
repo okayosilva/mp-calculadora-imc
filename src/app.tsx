@@ -4,18 +4,60 @@ import { Label } from "./components/label";
 import { ReferenceTable } from "./components/referenceTable";
 
 export function App() {
+  function handleEmptyFields(weight: string, height: string) {
+    if (!weight || !height) {
+      return alert("Preencha todos os campos!");
+    }
+  }
+
+  function handleValidation(heightNumber: number, weightNumber: number) {
+    if (isNaN(heightNumber) || isNaN(weightNumber)) {
+      return alert("Preencha os campos corretamente!");
+    }
+
+    if (weightNumber < 2 || weightNumber > 500) {
+      return alert("Ops... o peso deve ser entre 2 e 500 kg");
+    }
+    if (heightNumber < 0.5 || heightNumber > 2.5) {
+      return alert("Ops... a altura deve ser entre 50 cm e menor que 2.5 m");
+    }
+  }
+
+  function convertToNumber(value: string) {
+    return parseFloat(value.replace(",", "."));
+  }
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData) as {
+      weight: string;
+      height: string;
+    };
+
+    const { weight, height } = data;
+
+    handleEmptyFields(weight, height);
+
+    const heightNumber = convertToNumber(height) / 100;
+    const weightNumber = convertToNumber(weight);
+
+    handleValidation(heightNumber, weightNumber);
+  }
+
   return (
     <main className="max-4xl mx-auto bg-white px-48 py-24">
       <section id="form">
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <div className="space-y-1">
             <Label htmlFor="weight">Peso (kg)</Label>
-            <Input type="text" id="weight" />
+            <Input type="text" id="weight" name="weight" />
           </div>
 
           <div className="mt-4 space-y-1">
             <Label htmlFor="height">Altura (centímetros)</Label>
-            <Input type="text" id="height" />
+            <Input type="text" id="height" name="height" />
           </div>
 
           <Button type="submit">Calcular</Button>
