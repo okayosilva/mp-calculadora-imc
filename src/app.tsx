@@ -1,9 +1,21 @@
+import { useState } from "react";
 import { Button } from "./components/button";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
 import { ReferenceTable } from "./components/referenceTable";
+import { convertToNumber } from "./lib/convertToNumber";
+import { calculateIMC, imcResult } from "./lib/imc";
+
+type ImcDataProps = {
+  weightNumber: number;
+  heightNumber: number;
+  imc: number;
+  imcResponse: string;
+};
 
 export function App() {
+  const [imcData, setImcData] = useState<null | ImcDataProps>(null);
+
   function handleEmptyFields(weight: string, height: string) {
     if (!weight || !height) {
       return alert("Preencha todos os campos!");
@@ -23,10 +35,6 @@ export function App() {
     }
   }
 
-  function convertToNumber(value: string) {
-    return parseFloat(value.replace(",", "."));
-  }
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -44,6 +52,11 @@ export function App() {
     const weightNumber = convertToNumber(weight);
 
     handleValidation(heightNumber, weightNumber);
+
+    const imc = calculateIMC(weightNumber, heightNumber);
+    const imcResponse = imcResult(imc);
+
+    setImcData({ weightNumber, heightNumber, imc, imcResponse });
   }
 
   return (
