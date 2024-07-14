@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { FormEvent, MouseEvent, useState } from "react";
 import { Button } from "./components/button";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
 import { ReferenceTable } from "./components/referenceTable";
+import { TableImcResult } from "./components/tableImcResult";
 import { convertToNumber } from "./lib/convertToNumber";
 import { calculateIMC, imcResult } from "./lib/imc";
 
-type ImcDataProps = {
+export type ImcDataProps = {
   weightNumber: number;
   heightNumber: number;
   imc: number;
-  imcResponse: string;
+  imcStringResult: string;
 };
 
 export function App() {
@@ -35,7 +36,7 @@ export function App() {
     }
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -54,9 +55,21 @@ export function App() {
     handleValidation(heightNumber, weightNumber);
 
     const imc = calculateIMC(weightNumber, heightNumber);
-    const imcResponse = imcResult(imc);
+    const imcStringResult = imcResult(imc);
 
-    setImcData({ weightNumber, heightNumber, imc, imcResponse });
+    setImcData({
+      weightNumber,
+      heightNumber,
+      imc,
+      imcStringResult,
+    });
+
+    event.currentTarget.reset();
+  }
+
+  function handleReset(event: MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    setImcData(null);
   }
 
   return (
@@ -65,21 +78,43 @@ export function App() {
         <form onSubmit={handleSubmit}>
           <div className="space-y-1">
             <Label htmlFor="weight">Peso (kg)</Label>
-            <Input type="text" id="weight" name="weight" />
+            <Input
+              disabled={!!imcData}
+              autoComplete="off"
+              type="text"
+              id="weight"
+              name="weight"
+            />
           </div>
 
           <div className="mt-4 space-y-1">
             <Label htmlFor="height">Altura (centímetros)</Label>
-            <Input type="text" id="height" name="height" />
+            <Input
+              disabled={!!imcData}
+              autoComplete="off"
+              type="text"
+              id="height"
+              name="height"
+            />
           </div>
 
-          <Button type="submit">Calcular</Button>
+          {imcData ? (
+            <Button onClick={handleReset} type="button">
+              Refazer
+            </Button>
+          ) : (
+            <Button type="submit">Calcular</Button>
+          )}
         </form>
       </section>
-      <section id="result" className="h-40 px-4 py-10">
-        <p className="text-center text-xl text-neutral-400">
-          Saiba agora se está no seu <br /> peso ideal!
-        </p>
+      <section id="result" className="h-40 w-full px-4 py-10">
+        {imcData ? (
+          <TableImcResult {...imcData} />
+        ) : (
+          <p className="text-center text-xl text-neutral-400">
+            Saiba agora se está no seu <br /> peso ideal!
+          </p>
+        )}
       </section>
       <section id="reference-table">
         <ReferenceTable />

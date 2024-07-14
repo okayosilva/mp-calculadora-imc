@@ -22,7 +22,7 @@ export function ReferenceTable() {
         </tr>
         <tr>
           <td>Entre 25,0 e 29,9</td>
-          <td>Acima do peso</td>
+          <td>Sobrepeso</td>
         </tr>
         <tr>
           <td>Entre 30 e 34,99</td>
