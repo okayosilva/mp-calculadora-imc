@@ -73,7 +73,7 @@ export function App() {
   }
 
   return (
-    <main className="max-4xl mx-auto bg-white px-48 py-24">
+    <main className="md:max-4xl mx-auto bg-white px-5 py-10 md:px-48 md:py-24">
       <section id="form">
         <form onSubmit={handleSubmit}>
           <div className="space-y-1">

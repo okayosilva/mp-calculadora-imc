@@ -7,7 +7,6 @@ export function TableImcResult({
   imc,
   imcStringResult,
 }: ImcDataProps) {
-  console.log(heightNumber);
   return (
     <table className="mx-auto w-full text-center text-sm text-neutral-600 md:text-base md:[&>tbody>tr>td]:p-2 md:[&>tbody>tr>td]:px-4 md:[&>thead>tr>td]:p-2 md:[&>thead>tr>td]:px-4">
       <thead className="border-b border-rose-400">

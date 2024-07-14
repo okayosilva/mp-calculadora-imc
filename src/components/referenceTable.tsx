@@ -1,6 +1,6 @@
 export function ReferenceTable() {
   return (
-    <table className="mx-auto text-left text-neutral-600 shadow-sm">
+    <table className="mx-auto text-left text-xs text-neutral-600 shadow-sm md:text-base">
       <thead className="bg-zinc-100 text-rose-400">
         <tr>
           <th className="px-6 py-2">IMC</th>
